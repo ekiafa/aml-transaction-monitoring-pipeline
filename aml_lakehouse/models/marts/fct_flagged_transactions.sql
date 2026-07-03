@@ -7,16 +7,16 @@ with features as (
 scored as (
     select
         *,
-        (
-            is_same_account * 2 +
-            is_currency_mismatch * 1 +
-            case when amount_paid > 50000 then 2 else 0 end +
-            case when txn_count_last_10_from_account >= 10 then 1 else 0 end
-        ) as risk_score
+        case
+            when unique_senders_last_10 between 7 and 10 then 3
+            when unique_senders_last_10 in (5, 6) then 2
+            when unique_senders_last_10 = 4 then 1
+            else 0
+        end as risk_score
     from features
 )
 
 select
     *,
-    case when risk_score >= 3 then 1 else 0 end as is_flagged
+    case when risk_score >= 1 then 1 else 0 end as is_flagged
 from scored

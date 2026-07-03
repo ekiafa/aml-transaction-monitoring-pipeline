@@ -35,7 +35,19 @@ velocity as (
             partition by from_account
             order by transaction_timestamp
             rows between 10 preceding and current row
-        ) as amount_sum_last_10_from_account
+        ) as amount_sum_last_10_from_account,
+
+        size(collect_set(to_account) over (
+            partition by from_account
+            order by transaction_timestamp
+            rows between 10 preceding and current row
+        )) as unique_recipients_last_10,
+
+        size(collect_set(from_account) over (
+            partition by to_account
+            order by transaction_timestamp
+            rows between 10 preceding and current row
+        )) as unique_senders_last_10
 
     from flagged
 )
