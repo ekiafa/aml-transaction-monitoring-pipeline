@@ -6,3 +6,12 @@ sources:
     schema: aml_bronze
     tables:
       - name: raw_transactions
+        columns:
+          - name: is_laundering
+            tests:
+              - not_null
+              - accepted_values:
+                  values: [0, 1]
+          - name: amount_paid
+            tests:
+              - not_null

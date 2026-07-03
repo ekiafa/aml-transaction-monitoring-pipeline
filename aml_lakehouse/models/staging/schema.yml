@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: stg_transactions
+    description: "Cleaned transactions with proper timestamp typing"
+    columns:
+      - name: transaction_timestamp
+        tests:
+          - not_null
+      - name: from_account
+        tests:
+          - not_null
+      - name: to_account
+        tests:
+          - not_null
+      - name: is_laundering
+        tests:
+          - not_null
+          - accepted_values:
+              values: [0, 1]

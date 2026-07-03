@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: fct_flagged_transactions
+    description: "AML risk-scored transactions with flagging decision"
+    columns:
+      - name: risk_score
+        tests:
+          - not_null
+          - accepted_values:
+              values: [0, 1, 2, 3]
+      - name: is_flagged
+        tests:
+          - not_null
+          - accepted_values:
+              values: [0, 1]
