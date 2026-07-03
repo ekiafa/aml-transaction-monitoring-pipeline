@@ -218,3 +218,9 @@ __marimo__/
 .streamlit/secrets.toml
 data/
 data/
+dbt_profiles/
+logs/
+logs/
+config/
+aml_lakehouse/config/
+aml_lakehouse/logs/
