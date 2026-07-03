@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: aml_bronze
+    database: workspace
+    schema: aml_bronze
+    tables:
+      - name: raw_transactions
