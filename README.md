@@ -29,6 +29,13 @@ CSV --> PySpark ingestion --> Bronze (Delta)
 - **Orchestration** — Airflow DAG runs `dbt run` then `dbt test` against the Databricks warehouse.
 - **PySpark ETL (parallel path)** — `notebooks/02_pyspark_features.py` rebuilds the same features directly in PySpark instead of dbt SQL, transform-before-load style, and writes to `workspace.aml_silver.pyspark_transaction_features`. The main reason it exists: dbt's SQL couldn't express a real 24-hour rolling window (`RANGE BETWEEN INTERVAL ... PRECEDING` isn't supported through the Databricks dbt adapter), so the fan-in feature there was row-based (last 10 transactions) as a workaround. PySpark's `Window.rangeBetween()` handles true time-based windows natively, so this notebook has the more accurate version of that feature.
 
+## Data flow techniques
+
+A couple of notebooks explore patterns beyond the core pipeline, mainly as an exercise in different ways data can move through a system:
+
+- **`notebooks/03_incremental_load.py`** — builds a deterministic row hash (`transaction_id`, via `sha2` over the key fields) and compares three loading strategies on the same table: `overwrite` (simple but re-processes everything), `append` (faster, but not idempotent — running it twice duplicates rows, demonstrated directly), and `MERGE`/upsert via `DeltaTable` (idempotent — re-running the same batch is a no-op). The merge pattern is the one that would actually be used in a scheduled, retryable pipeline.
+- **`notebooks/04_multi_source_merge.py`** — joins the transaction data against two additional sources: a small hand-built country risk-rating table and a synthetic customer dimension (one row per account, with country, occupation, PEP flag, and Faker-generated names). This is mostly a technical exercise in combining multiple sources into one enriched view (two sequential left joins, fact table + two dimension tables) rather than a source of new signal — the country risk assignment is random by construction, so it shows ~0% lift against the laundering label, as expected. The point of including it is the join pattern itself, not a finding.
+
 ## Checks
 
 12 dbt tests across the pipeline:
@@ -47,6 +54,10 @@ notebooks/01_ingest_bronze.py
 
 # PySpark feature engineering, ETL-style (optional, parallel to dbt)
 notebooks/02_pyspark_features.py
+
+# data flow technique exercises (optional)
+notebooks/03_incremental_load.py
+notebooks/04_multi_source_merge.py
 
 # dbt
 cd aml_lakehouse
