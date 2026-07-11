@@ -1,0 +1,8 @@
+name: aml-jupyter
+channels:
+  - defaults
+dependencies:
+  - python=3.11
+  - pip
+  - pip:
+    - -r file:environment/requirements.txt

@@ -1,0 +1,8 @@
+jupyterlab>=4.0
+notebook>=6.0
+ipykernel
+pandas
+numpy
+pyspark
+matplotlib
+plotly
