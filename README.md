@@ -36,6 +36,7 @@ A couple of notebooks explore patterns beyond the core pipeline, mainly as an ex
 - **`notebooks/03_incremental_load.py`** — builds a deterministic row hash (`transaction_id`, via `sha2` over the key fields) and compares three loading strategies on the same table: `overwrite` (simple but re-processes everything), `append` (faster, but not idempotent — running it twice duplicates rows, demonstrated directly), and `MERGE`/upsert via `DeltaTable` (idempotent — re-running the same batch is a no-op). The merge pattern is the one that would actually be used in a scheduled, retryable pipeline.
 - **`notebooks/04_multi_source_merge.py`** — joins the transaction data against two additional sources: a small hand-built country risk-rating table and a synthetic customer dimension (one row per account, with country, occupation, PEP flag, and Faker-generated names). This is mostly a technical exercise in combining multiple sources into one enriched view (two sequential left joins, fact table + two dimension tables) rather than a source of new signal — the country risk assignment is random by construction, so it shows ~0% lift against the laundering label, as expected. The point of including it is the join pattern itself, not a finding.
 - **`notebooks/05_error_handling.py`** — a validation gate that checks for null account IDs, negative amounts, and null labels before letting data proceed (raises and halts on failure, which is what would fail an Airflow task rather than silently pass bad data downstream), plus a dead-letter pattern: rows that fail validation are split off into a `rejected_transactions` table with a rejection reason and timestamp instead of being dropped, so they stay inspectable.
+- **`notebooks/06_streaming_pipeline.py`** — the same data split into chunks landed as JSON files, read with `spark.readStream` and written with `spark.writeStream` into a Delta table, using `trigger(availableNow=True)` so it processes whatever's currently available and stops (rather than running forever, which doesn't make sense inside a notebook). The interesting part is the checkpoint: re-running the exact same streaming query a second time doesn't reprocess or duplicate anything, because Spark tracks which files it's already consumed — idempotency comes for free here, unlike the manual `append` case in the incremental-load notebook. Airflow doesn't really have a role in a streaming setup like this; it's built around jobs that start and finish, not long-running listeners, so this one runs standalone.
 
 ## Checks
 
@@ -60,6 +61,7 @@ notebooks/02_pyspark_features.py
 notebooks/03_incremental_load.py
 notebooks/04_multi_source_merge.py
 notebooks/05_error_handling.py
+notebooks/06_streaming_pipeline.py
 
 # dbt
 cd aml_lakehouse
