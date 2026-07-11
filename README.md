@@ -27,6 +27,7 @@ CSV --> PySpark ingestion --> Bronze (Delta)
 - **Silver (intermediate)** — `int_transaction_features`: same-account flag, currency mismatch, amount discrepancy, rolling transaction count/sum, unique senders/recipients per account (window functions).
 - **Gold** — `fct_flagged_transactions`: risk score and flag, built on the features that actually showed lift against the laundering label (mainly unique-senders / fan-in, after testing each feature individually — most of the intuitive ones didn't hold up).
 - **Orchestration** — Airflow DAG runs `dbt run` then `dbt test` against the Databricks warehouse.
+- **PySpark ETL (parallel path)** — `notebooks/02_pyspark_features.py` rebuilds the same features directly in PySpark instead of dbt SQL, transform-before-load style, and writes to `workspace.aml_silver.pyspark_transaction_features`. The main reason it exists: dbt's SQL couldn't express a real 24-hour rolling window (`RANGE BETWEEN INTERVAL ... PRECEDING` isn't supported through the Databricks dbt adapter), so the fan-in feature there was row-based (last 10 transactions) as a workaround. PySpark's `Window.rangeBetween()` handles true time-based windows natively, so this notebook has the more accurate version of that feature.
 
 ## Checks
 
@@ -43,6 +44,9 @@ Run with `dbt test` from `aml_lakehouse/`.
 ```bash
 # ingestion (Databricks notebook)
 notebooks/01_ingest_bronze.py
+
+# PySpark feature engineering, ETL-style (optional, parallel to dbt)
+notebooks/02_pyspark_features.py
 
 # dbt
 cd aml_lakehouse
