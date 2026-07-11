@@ -1,0 +1,135 @@
+<svg viewBox="0 0 1180 900" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5b6472"/>
+    </marker>
+    <marker id="arrowPurple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#8b5cf6"/>
+    </marker>
+  </defs>
+
+  <rect width="1180" height="900" fill="#ffffff"/>
+
+  <!-- Title -->
+  <text x="30" y="38" font-size="20" font-weight="700" fill="#1a1d23">AML Transaction Monitoring Pipeline</text>
+  <text x="30" y="58" font-size="12.5" fill="#6b7280">Bronze / Silver / Gold on Databricks, orchestrated with Airflow — plus a set of PySpark data-flow exercises off the same bronze table</text>
+
+  <!-- Source -->
+  <rect x="30" y="90" width="150" height="55" rx="8" fill="#f3f4f6" stroke="#9ca3af" stroke-width="1.3"/>
+  <text x="105" y="114" font-size="13" font-weight="600" fill="#1a1d23" text-anchor="middle">Kaggle CSV</text>
+  <text x="105" y="130" font-size="10.5" fill="#6b7280" text-anchor="middle">IBM AML dataset</text>
+
+  <line x1="180" y1="117" x2="228" y2="117" stroke="#5b6472" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+  <!-- PySpark ingest -->
+  <rect x="230" y="90" width="170" height="55" rx="8" fill="#fef3e2" stroke="#e8a33d" stroke-width="1.3"/>
+  <text x="315" y="111" font-size="13" font-weight="600" fill="#1a1d23" text-anchor="middle">PySpark ingestion</text>
+  <text x="315" y="127" font-size="10" fill="#8a5a1e" text-anchor="middle">01_ingest_bronze.py — extract + load</text>
+
+  <line x1="315" y1="145" x2="315" y2="182" stroke="#5b6472" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+  <!-- Bronze : central hub -->
+  <rect x="220" y="184" width="190" height="55" rx="8" fill="#cd7f32" fill-opacity="0.18" stroke="#b0651a" stroke-width="1.6"/>
+  <text x="315" y="207" font-size="13.5" font-weight="700" fill="#7a3e0f" text-anchor="middle">BRONZE</text>
+  <text x="315" y="224" font-size="10" fill="#7a3e0f" text-anchor="middle">aml_bronze.raw_transactions</text>
+
+  <!-- ===== Main ELT column (left) ===== -->
+  <line x1="315" y1="239" x2="315" y2="276" stroke="#5b6472" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+  <rect x="220" y="278" width="190" height="50" rx="8" fill="#e5e7eb" stroke="#9ca3af" stroke-width="1.3"/>
+  <text x="315" y="299" font-size="12.5" font-weight="700" fill="#374151" text-anchor="middle">SILVER — staging</text>
+  <text x="315" y="315" font-size="10" fill="#4b5563" text-anchor="middle">stg_transactions (dbt)</text>
+
+  <line x1="315" y1="328" x2="315" y2="365" stroke="#5b6472" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+  <rect x="205" y="367" width="220" height="60" rx="8" fill="#e5e7eb" stroke="#9ca3af" stroke-width="1.3"/>
+  <text x="315" y="389" font-size="12.5" font-weight="700" fill="#374151" text-anchor="middle">SILVER — features</text>
+  <text x="315" y="405" font-size="10" fill="#4b5563" text-anchor="middle">int_transaction_features (dbt)</text>
+  <text x="315" y="419" font-size="9.5" fill="#6b7280" text-anchor="middle">fan-in / fan-out, velocity</text>
+
+  <line x1="315" y1="427" x2="315" y2="464" stroke="#5b6472" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+  <rect x="215" y="466" width="200" height="55" rx="8" fill="#fde68a" fill-opacity="0.55" stroke="#c99a10" stroke-width="1.3"/>
+  <text x="315" y="488" font-size="12.5" font-weight="700" fill="#7a5c05" text-anchor="middle">GOLD</text>
+  <text x="315" y="504" font-size="10" fill="#7a5c05" text-anchor="middle">fct_flagged_transactions</text>
+  <text x="315" y="516" font-size="9" fill="#8a6f1a" text-anchor="middle">risk_score, is_flagged</text>
+
+  <line x1="315" y1="521" x2="315" y2="558" stroke="#5b6472" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+  <rect x="215" y="560" width="200" height="55" rx="8" fill="#dcfce7" stroke="#22c55e" stroke-width="1.3"/>
+  <text x="315" y="582" font-size="12.5" font-weight="700" fill="#166534" text-anchor="middle">Airflow</text>
+  <text x="315" y="598" font-size="9.5" fill="#166534" text-anchor="middle">dbt_run &#8594; dbt_test (Docker Compose)</text>
+
+  <!-- dbt tests note -->
+  <rect x="230" y="630" width="170" height="70" rx="6" fill="#eef2ff" stroke="#818cf8" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="315" y="649" font-size="10.5" font-weight="700" fill="#3730a3" text-anchor="middle">12 dbt tests</text>
+  <text x="315" y="664" font-size="9" fill="#4338ca" text-anchor="middle">not_null / accepted_values</text>
+  <text x="315" y="677" font-size="9" fill="#4338ca" text-anchor="middle">on source, staging, gold</text>
+  <text x="315" y="690" font-size="9" fill="#4338ca" text-anchor="middle">columns</text>
+
+  <!-- ===== PySpark exercises fan out from bronze (right side) ===== -->
+  <line x1="410" y1="211" x2="470" y2="211" stroke="#8b5cf6" stroke-width="1.4" marker-end="url(#arrowPurple)"/>
+
+  <!-- vertical spine for the exercises -->
+  <line x1="470" y1="211" x2="470" y2="800" stroke="#8b5cf6" stroke-width="1.2" stroke-dasharray="3,3"/>
+
+  <!-- 02 pyspark features : reads from Silver staging, not Bronze -->
+  <line x1="410" y1="300" x2="532" y2="241" stroke="#6b7280" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <text x="452" y="285" font-size="8" fill="#6b7280">reads stg_transactions</text>
+  <rect x="532" y="212" width="300" height="58" rx="8" fill="#fef3e2" stroke="#e8a33d" stroke-width="1.2"/>
+  <text x="547" y="234" font-size="12" font-weight="700" fill="#8a5a1e">02_pyspark_features.py</text>
+  <text x="547" y="250" font-size="9.5" fill="#8a5a1e">Same features, PySpark instead of dbt SQL —</text>
+  <text x="547" y="263" font-size="9.5" fill="#8a5a1e">real 24h window (dbt SQL couldn't express this)</text>
+
+  <!-- 03 incremental load -->
+  <line x1="470" y1="330" x2="530" y2="330" stroke="#8b5cf6" stroke-width="1.2" marker-end="url(#arrowPurple)"/>
+  <rect x="532" y="302" width="300" height="58" rx="8" fill="#fce7f3" stroke="#db2777" stroke-width="1.2"/>
+  <text x="547" y="324" font-size="12" font-weight="700" fill="#9d174d">03_incremental_load.py</text>
+  <text x="547" y="340" font-size="9.5" fill="#9d174d">overwrite vs append (duplicates on retry) vs</text>
+  <text x="547" y="353" font-size="9.5" fill="#9d174d">MERGE/upsert (idempotent) — hash-based row id</text>
+
+  <!-- 04 multi-source merge -->
+  <line x1="470" y1="420" x2="530" y2="420" stroke="#8b5cf6" stroke-width="1.2" marker-end="url(#arrowPurple)"/>
+  <rect x="532" y="392" width="300" height="68" rx="8" fill="#ede9fe" stroke="#8b5cf6" stroke-width="1.2"/>
+  <text x="547" y="414" font-size="12" font-weight="700" fill="#5b21b6">04_multi_source_merge.py</text>
+  <text x="547" y="430" font-size="9.5" fill="#5b21b6">Joins customers (synthetic, Faker) + countries</text>
+  <text x="547" y="443" font-size="9.5" fill="#5b21b6">(risk lookup) onto transactions — two left joins</text>
+  <text x="547" y="456" font-size="8" fill="#7c3aed">unique accounts from bronze, final join uses stg_transactions</text>
+
+  <rect x="850" y="392" width="130" height="46" rx="7" fill="#f3f4f6" stroke="#9ca3af" stroke-width="1.1"/>
+  <text x="915" y="411" font-size="10.5" font-weight="600" fill="#1a1d23" text-anchor="middle">Customers</text>
+  <text x="915" y="425" font-size="8.5" fill="#6b7280" text-anchor="middle">synthetic, Faker names</text>
+  <line x1="832" y1="410" x2="848" y2="410" stroke="#8b5cf6" stroke-width="1.1" marker-end="url(#arrowPurple)"/>
+
+  <rect x="850" y="444" width="130" height="46" rx="7" fill="#f3f4f6" stroke="#9ca3af" stroke-width="1.1"/>
+  <text x="915" y="463" font-size="10.5" font-weight="600" fill="#1a1d23" text-anchor="middle">Countries</text>
+  <text x="915" y="477" font-size="8.5" fill="#6b7280" text-anchor="middle">risk rating lookup</text>
+  <line x1="832" y1="420" x2="915" y2="444" stroke="#8b5cf6" stroke-width="1.1" marker-end="url(#arrowPurple)"/>
+
+  <text x="990" y="415" font-size="9" fill="#6b7280">country risk is random by</text>
+  <text x="990" y="428" font-size="9" fill="#6b7280">construction &#8594; ~0% lift</text>
+  <text x="990" y="441" font-size="9" fill="#6b7280">(join exercise, not a signal)</text>
+
+  <!-- 05 error handling -->
+  <line x1="470" y1="510" x2="530" y2="510" stroke="#8b5cf6" stroke-width="1.2" marker-end="url(#arrowPurple)"/>
+  <rect x="532" y="482" width="300" height="58" rx="8" fill="#fee2e2" stroke="#dc2626" stroke-width="1.2"/>
+  <text x="547" y="504" font-size="12" font-weight="700" fill="#991b1b">05_error_handling.py</text>
+  <text x="547" y="520" font-size="9.5" fill="#991b1b">Validation gate (raises + halts on bad data) +</text>
+  <text x="547" y="533" font-size="9.5" fill="#991b1b">dead-letter table for rejected rows w/ reason</text>
+
+  <!-- 06 streaming -->
+  <line x1="470" y1="600" x2="530" y2="600" stroke="#8b5cf6" stroke-width="1.2" marker-end="url(#arrowPurple)"/>
+  <rect x="532" y="572" width="300" height="58" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="1.2"/>
+  <text x="547" y="594" font-size="12" font-weight="700" fill="#1e40af">06_streaming_pipeline.py</text>
+  <text x="547" y="610" font-size="9.5" fill="#1e40af">readStream / writeStream + checkpoint —</text>
+  <text x="547" y="623" font-size="9.5" fill="#1e40af">idempotent by default, runs standalone (no Airflow)</text>
+
+  <!-- Legend box -->
+  <rect x="532" y="662" width="300" height="90" rx="8" fill="#f9fafb" stroke="#d1d5db" stroke-width="1"/>
+  <text x="547" y="684" font-size="10.5" font-weight="700" fill="#374151">Why two paths?</text>
+  <text x="547" y="701" font-size="9.5" fill="#4b5563">Left: dbt does the real ELT (transform</text>
+  <text x="547" y="714" font-size="9.5" fill="#4b5563">in-place, tested, orchestrated by Airflow).</text>
+  <text x="547" y="731" font-size="9.5" fill="#4b5563">Right: PySpark notebooks off the same</text>
+  <text x="547" y="744" font-size="9.5" fill="#4b5563">bronze table, exercising ETL-style and</text>
+  <text x="547" y="757" font-size="9.5" fill="#4b5563" opacity="0">spacer</text>
+</svg>

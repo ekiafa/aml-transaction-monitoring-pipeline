@@ -1,5 +1,7 @@
 # AML Transaction Monitoring Pipeline
 
+![Architecture](docs/architecture.svg)
+
 An AML transaction monitoring pipeline on synthetic bank data — PySpark for ingestion, dbt on Databricks for transformations, Airflow for orchestration.
 
 Dataset: IBM's synthetic AML dataset (Kaggle, HI-Small — ~5M transactions, ~0.1% labeled laundering).
