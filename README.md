@@ -48,6 +48,10 @@ A couple of notebooks explore patterns beyond the core pipeline, mainly as an ex
 - **Staging:** `transaction_timestamp`, `from_account`, `to_account` not null; `is_laundering` not null and in `[0,1]`.
 - **Gold:** `risk_score` not null and in `[0,1,2,3]`; `is_flagged` not null and in `[0,1]`.
 
+## CI
+
+A GitHub Actions workflow (`.github/workflows/dbt_ci.yml`) runs `dbt parse` on every push or PR that touches `aml_lakehouse/`, catching SQL/Jinja syntax errors before they reach `main`. It uses dummy Databricks credentials since parsing doesn't need a live connection — a full `dbt run`/`dbt test` in CI would need a staging warehouse and real secrets, which felt like overkill for this project.
+
 Run with `dbt test` from `aml_lakehouse/`.
 
 ## Run it
