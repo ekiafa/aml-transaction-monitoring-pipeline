@@ -1,4 +1,7 @@
+![dbt CI](https://github.com/ekiafa/aml-transaction-monitoring-pipeline/actions/workflows/dbt_ci.yml/badge.svg)
+
 # AML Transaction Monitoring Pipeline
+...
 
 ![Architecture](docs/architecture.svg)
 
