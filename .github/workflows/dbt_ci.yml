@@ -1,0 +1,45 @@
+name: dbt CI
+
+on:
+  push:
+    paths:
+      - 'aml_lakehouse/**'
+  pull_request:
+    paths:
+      - 'aml_lakehouse/**'
+
+jobs:
+  dbt-parse:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dbt-databricks
+        run: pip install dbt-databricks
+
+      - name: Create dummy profiles.yml
+        run: |
+          mkdir -p ~/.dbt
+          cat > ~/.dbt/profiles.yml << 'PROFILE'
+          aml_lakehouse:
+            target: dev
+            outputs:
+              dev:
+                type: databricks
+                catalog: workspace
+                schema: aml_silver
+                host: dummy-host.cloud.databricks.com
+                http_path: /sql/1.0/warehouses/dummy
+                token: dummy-token
+                threads: 1
+          PROFILE
+
+      - name: dbt parse
+        working-directory: aml_lakehouse
+        run: dbt parse
